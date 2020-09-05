@@ -17,7 +17,7 @@ public class KafkaProducer1 implements Runnable {
 
     @Override
     public void run() {
-        final String TOPIC = "test-par3";
+        final String TOPIC = "peter-topic";
 
         Properties props = new KafkaConfig().init();
         Producer<String, String> producer = new KafkaProducer<>(props);
