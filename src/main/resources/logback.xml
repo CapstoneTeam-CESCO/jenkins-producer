@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="true" scanPeriod="30 seconds" debug="true">
+    <!-- <property name="flag" value="${spring.profiles.active}" /> -->
+    <property name="flag" value="dev" />
+    <conversionRule conversionWord="clr" converterClass="org.springframework.boot.logging.logback.ColorConverter"/>
+    <conversionRule conversionWord="wex" converterClass="org.springframework.boot.logging.logback.WhitespaceThrowableProxyConverter"/>
+
+    <logger name="org.hibernate.validator.internal.util.Version" level="debug"/>
+    <logger name="org.apache.coyote.http11.Http11NioProtocol" level="debug"/>
+    <logger name="org.crsh.plugin" level="debug"/>
+    <logger name="org.apache.tomcat.util.net.NioSelectorPool" level="debug"/>
+    <logger name="org.apache.catalina.startup.DigesterFactory" level="debug"/>
+    <logger name="org.apache.catalina.util.LifecycleBase" level="debug"/>
+    <logger name="org.eclipse.jetty.util.component.AbstractLifeCycle" level="debug"/>
+    
+    <include resource="logback-${flag}.xml"/>
+</configuration>
