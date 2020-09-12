@@ -56,9 +56,8 @@ public class TcpServer {
 
             // Bind and start to accept incoming connections.
             ChannelFuture f = b.bind(port).sync();
-            
-            System.out.println("TCP server starts with port " + port);
-            System.out.println("");
+
+            LogUtil.traceLog.info("TCP server starts with port " + port);
 
             // Wait until the server socket is closed.
             // In this example, this does not happen, but you can do that to gracefully

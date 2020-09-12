@@ -1,6 +1,11 @@
 package capstone.tcp.server.domain;
 
+import capstone.tcp.server.common.CapstoneConstant;
+
 import java.io.Serializable;
+import java.util.Arrays;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 public class MPU implements Serializable {
 
@@ -58,6 +63,52 @@ public class MPU implements Serializable {
         builder.append(isDevice);
         builder.append("]");
         return builder.toString();
+    }
+
+    public Map<String, Object> toJsonMap() {
+        Map<String, Object> jsonMap = new LinkedHashMap<>();
+        jsonMap.put("time", time);
+        jsonMap.put("rssi", rssi);
+        jsonMap.put("trapId", trapId);
+        jsonMap.put("trapIdType", trapIdType);
+        jsonMap.put("cmd", cmd);
+        jsonMap.put("item", item);
+        String device = trapId.substring(0, 2);
+        if (Arrays.asList(CapstoneConstant.DEVICE_PEST).contains(device)) {
+            switch (item) {
+                case CapstoneConstant.ITEM_WARNING:
+                    jsonMap.put("data_type", "PEST_warning");
+                    jsonMap.put("data", pest);
+                    break;
+                case CapstoneConstant.ITEM_CYCLE:
+                    jsonMap.put("data_type", "PEST_cycle");
+                    jsonMap.put("data", pest);
+                    break;
+                case CapstoneConstant.ITEM_SNAPSHOT:
+                    jsonMap.put("data_type", "PEST_snapshot");
+                    jsonMap.put("data", snapShot);
+                    break;
+            }// switch
+        } else if (Arrays.asList(CapstoneConstant.DEVICE_MOUSE).contains(device)) {
+            switch (item) {
+                case CapstoneConstant.ITEM_WARNING:
+                    jsonMap.put("data_type", "MOUSE_warning");
+                    jsonMap.put("data", mouseWarning);
+                    break;
+                case CapstoneConstant.ITEM_CYCLE:
+                    jsonMap.put("data_type", "MOUSE_cycle");
+                    jsonMap.put("data", mouseCycle);
+                    break;
+                case CapstoneConstant.ITEM_SNAPSHOT:
+                    jsonMap.put("data_type", "MOUSE_snapshot");
+                    jsonMap.put("data", snapShot);
+                    break;
+            }// switch
+        } else if (Arrays.asList(CapstoneConstant.DEVICE_NETWORK).contains(device)) {
+            jsonMap.put("data_type", "DamWarning");
+            jsonMap.put("data", damWarning);
+        }
+        return jsonMap;
     }
 
     public String getTime() {

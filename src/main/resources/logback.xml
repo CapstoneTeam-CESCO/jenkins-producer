@@ -2,8 +2,8 @@
 <configuration scan="true" scanPeriod="30 seconds" debug="true">
     <!-- <property name="flag" value="${spring.profiles.active}" /> -->
     <property name="flag" value="dev" />
-    <conversionRule conversionWord="clr" converterClass="org.springframework.boot.logging.logback.ColorConverter"/>
-    <conversionRule conversionWord="wex" converterClass="org.springframework.boot.logging.logback.WhitespaceThrowableProxyConverter"/>
+<!--    <conversionRule conversionWord="clr" converterClass="org.springframework.boot.logging.logback.ColorConverter"/>-->
+<!--    <conversionRule conversionWord="wex" converterClass="org.springframework.boot.logging.logback.WhitespaceThrowableProxyConverter"/>-->
 
     <logger name="org.hibernate.validator.internal.util.Version" level="debug"/>
     <logger name="org.apache.coyote.http11.Http11NioProtocol" level="debug"/>

@@ -18,28 +18,28 @@
   */
 package capstone.tcp.server.handler;
 
-import java.awt.*;
 import java.net.InetSocketAddress;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import io.netty.channel.ChannelFutureListener;
+import capstone.tcp.server.domain.KafkaMessage;
+import capstone.tcp.server.server.KafkaServer;
 import org.apache.commons.lang3.math.NumberUtils;
+import org.apache.kafka.clients.producer.Producer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.snksoft.crc.CRC;
 
 import capstone.tcp.server.common.CapstoneConstant;
 import capstone.tcp.server.common.ConvertUtil;
 import capstone.tcp.server.common.LogUtil;
 import capstone.tcp.server.domain.SPU;
-import capstone.tcp.server.server.KafkaProducer1;
 import capstone.tcp.server.service.MessageService;
+import capstone.tcp.server.service.SendService;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandler.Sharable;
@@ -52,7 +52,17 @@ public class ServiceHandler extends ChannelInboundHandlerAdapter {
     
     @Autowired
     private MessageService service;
-    
+
+    @Autowired
+    private SendService sService;
+
+    private Producer<String, String> producer;
+
+    public ServiceHandler() {
+        this.producer = new KafkaServer().getProducer();
+        LogUtil.traceLog.info("Kafka server starts!!");
+    }
+
     /**
      * 채널이 이벤트 루프에 등록되었을 때 발생한다.
      * 이벤트 루프는 네티가 이베트를 실행하는 스레드로써 부트 스트랩에 설정한 이벤트 루프다.
@@ -114,11 +124,11 @@ public class ServiceHandler extends ChannelInboundHandlerAdapter {
         }
         
 //         check sum ; byte sum ; 0 ~ 255
-//         if( getChkSum(dst, command) != command.getChkSum() ) {
-//             LogUtil.traceLogInfo(command, "Dismatch chkSum");
-//             nack(ctx);
-//             throw new Exception("Dismatch chkSum");
-//         }
+         if( getChkSum(dst, length, command) != command.getChkSum() ) {
+             LogUtil.traceLogInfo(command, "Dismatch chkSum");
+             nack(ctx);
+             throw new Exception("Dismatch chkSum");
+         }
         
         //run !!
         service.run(dst, command);
@@ -135,7 +145,7 @@ public class ServiceHandler extends ChannelInboundHandlerAdapter {
         }
         
         long end = System.currentTimeMillis();
-        LogUtil.traceLogInfo(command, "소요시간 :" + (end-start)/1000.0f + "초");
+        LogUtil.traceLogInfo(command, "Elapsed Time :" + (end-start)/1000.0f + "seconds");
         LogUtil.traceLogInfo(command, "===========  END  ===========");
         
         //system log
@@ -153,9 +163,8 @@ public class ServiceHandler extends ChannelInboundHandlerAdapter {
         
         LogUtil.systemLog.info(getJsonString(jsonMap));
 
-        KafkaProducer1 kp = new KafkaProducer1(getJsonString(jsonMap));
-        Thread t = new Thread(kp);
-        t.start();
+        // send message to Kafka
+        sService.sendMsg(producer, getJsonString(new KafkaMessage(command).toJsonMap()));
     }
 
     /**
@@ -277,17 +286,13 @@ public class ServiceHandler extends ChannelInboundHandlerAdapter {
      * @param command SPU 데이터
      * @return 체크섬
      */
-    private static int getChkSum(byte[] dst, SPU command) {
-    	CRC tableDriven = new CRC(CRC.Parameters.XMODEM);
-       	int chkSum = (int) tableDriven.calculateCRC(dst);
-        
-        while(true) {
-            if(chkSum >= 256) chkSum -= 256;
-            if(chkSum < 0) chkSum += 256;
-            if(chkSum >= 0 && chkSum < 256) break;
-        }
+    private static int getChkSum(byte[] dst, int length, SPU command) {
+        int sum = 0;
+        for(int idx = 10; idx < length-2; idx++) sum += dst[idx];
+
+        int chkSum = sum % 256;
         LogUtil.traceLogInfo(command, "chkSum : " + chkSum);
-        
+
         return chkSum;
     }
     
@@ -310,7 +315,7 @@ public class ServiceHandler extends ChannelInboundHandlerAdapter {
     
     /**
      * Map<String, Object> 형식을 Json 으로 변경
-     * @param Map
+     * @param jsonMap
      * @return
      * @throws Exception
      */

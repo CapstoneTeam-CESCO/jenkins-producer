@@ -1,16 +1,31 @@
 <included>
     <timestamp key="byDay" datePattern="yyyy-MM-dd"/>
     <!-- <property name="LOG_DIR" value="/home/19826/logs/pg/app/adapter"/> -->
-    <property name="LOG_DIR" value="/Users/donggyu-kim/Desktop/producer-log"/>
-    <property name="FILE_LOG_PATTERN" value="%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %msg%n%wex"/>
+<!--    <property name="LOG_DIR" value="/Users/m/Desktop/캡스톤"/>-->
+    <property name="LOG_DIR" value="logs"/>
+    <property name="FILE_LOG_PATTERN" value="%d{yyyy-MM-dd HH:mm:ss.SSS} %highlight(%5level) [%t] %msg%n"/>
     <!-- <property name="FILE_LOG_PATTERN" value="%d{yyyy-MM-dd HH:mm:ss.SSS} %5p [%t] %C:%L - %msg%n%wex"/> -->
 
-    <property name="CONSOLE_LOG_PATTERN" value="%clr(%d{yyyy-MM-dd HH:mm:ss.SSS}){faint} %clr(%5p) %clr(${PID:- }){magenta} %clr(---){faint} %clr([%15.15t{14}]){faint} %clr(%-40.40logger{39}){cyan} %clr(:){faint} %m%n%wex"/>
+<!--    <property name="CONSOLE_LOG_PATTERN" value="%clr(%d{yyyy-MM-dd HH:mm:ss.SSS}){faint} %clr(%5p) %clr(${PID:- }){magenta} %clr(-&#45;&#45;){faint} %clr([%15.15t{14}]){faint} %clr(%-40.40logger{39}){cyan} %clr(:){faint} %m%n%wex"/>-->
 
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
             <pattern>${FILE_LOG_PATTERN}</pattern>
         </encoder>
+    </appender>
+
+    <appender name="FILE-CONSOLE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <encoder>
+            <pattern>${FILE_LOG_PATTERN}</pattern>
+        </encoder>
+        <file>${LOG_DIR}/console/console.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_DIR}/console/console.%d{yyyy-MM-dd}.log.%i.gz</fileNamePattern>
+            <maxHistory>30</maxHistory>
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>100MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy>
     </appender>
 
     <appender name="FILE-TRACE" class="ch.qos.logback.core.rolling.RollingFileAppender">
@@ -69,8 +84,12 @@
         </rollingPolicy>
     </appender>
 
-      <logger name="trace" level="debug">
+    <logger name="trace" level="debug">
         <appender-ref ref="FILE-TRACE"/>
+    </logger>
+
+    <logger name="trace" level="debug">
+        <appender-ref ref="CONSOLE"/>
     </logger>
 
     <logger name="error" level="info">
@@ -85,21 +104,21 @@
         <appender-ref ref="FILE-SYSTEM"/>
     </logger>
 
-      <logger name="jdbc" level="OFF"/>
-  
-      <logger name="jdbc.sqlonly" level="OFF"/>
-      <logger name="jdbc.sqltiming" level="DEBUG"/>
-      <logger name="jdbc.audit" level="OFF"/>
-      <logger name="jdbc.resultset" level="OFF"/>
-      <logger name="jdbc.resultsettable" level="OFF"/>
-      <logger name="jdbc.connection" level="OFF"/>
+<!--      <logger name="jdbc" level="OFF"/>-->
+<!--  -->
+<!--      <logger name="jdbc.sqlonly" level="OFF"/>-->
+<!--      <logger name="jdbc.sqltiming" level="DEBUG"/>-->
+<!--      <logger name="jdbc.audit" level="OFF"/>-->
+<!--      <logger name="jdbc.resultset" level="OFF"/>-->
+<!--      <logger name="jdbc.resultsettable" level="OFF"/>-->
+<!--      <logger name="jdbc.connection" level="OFF"/>-->
       
     <logger name="org.springframework" level="info"/>
     
     <logger name="org.springframework.scheduling.annotation.ScheduledAnnotationBeanPostProcessor" level="info"/>
-    
+
     <root level="DEBUG">
-        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="FILE-CONSOLE"/>
     </root>
 
 </included>
