@@ -11,7 +11,7 @@ public class SendServiceImpl implements SendService {
 
     @Override
     public void sendMsg(Producer producer, String msg) {
-        String topic = "test-par3";
+        String topic = "test-topic";
 
         try {
             LogUtil.traceLog.info("========== START to send message to Kafka ==========");
