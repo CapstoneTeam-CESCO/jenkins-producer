@@ -1,6 +1,8 @@
 package capstone.tcp.server.domain;
 
 import java.io.Serializable;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 public class MouseCycleData implements Serializable {
 
@@ -45,6 +47,15 @@ public class MouseCycleData implements Serializable {
         builder.append(seqNum);
         builder.append("]");
         return builder.toString();
+    }
+
+    public Map<String, Object> toJsonMap() {
+        Map<String, Object> jsonMap = new LinkedHashMap<>();
+        jsonMap.put("capture", capture);
+        jsonMap.put("voltage", voltage);
+        jsonMap.put("rssi", rssi);
+        jsonMap.put("statusCode", statusCode);
+        return jsonMap;
     }
     
     public int getCapture() {

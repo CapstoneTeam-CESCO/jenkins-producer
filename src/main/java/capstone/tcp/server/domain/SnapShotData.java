@@ -1,6 +1,8 @@
 package capstone.tcp.server.domain;
 
 import java.io.Serializable;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 public class SnapShotData implements Serializable {
 
@@ -24,6 +26,13 @@ public class SnapShotData implements Serializable {
         builder.append(imageDataHex);
         builder.append("]");
         return builder.toString();
+    }
+
+    public Map<String, Object> toJsonMap() {
+        Map<String, Object> jsonMap = new LinkedHashMap<>();
+        jsonMap.put("imageIndex", imageIndex);
+        jsonMap.put("imageData", imageData);
+        return jsonMap;
     }
 
     public int getImageIndex() {

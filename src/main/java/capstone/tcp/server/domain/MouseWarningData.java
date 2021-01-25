@@ -1,6 +1,8 @@
 package capstone.tcp.server.domain;
 
 import java.io.Serializable;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 public class MouseWarningData implements Serializable {
 
@@ -48,6 +50,16 @@ public class MouseWarningData implements Serializable {
         builder.append(capture);
         builder.append("]");
         return builder.toString();
+    }
+
+    public Map<String, Object> toJsonMap() {
+        Map<String, Object> jsonMap = new LinkedHashMap<>();
+        jsonMap.put("inclination", inclination);
+        jsonMap.put("power", power);
+        jsonMap.put("voltage", voltage);
+        jsonMap.put("flag", flag);
+        jsonMap.put("capture", capture);
+        return jsonMap;
     }
     
     public String getInclination() {

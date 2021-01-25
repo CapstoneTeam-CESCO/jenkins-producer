@@ -2,7 +2,9 @@ package capstone.tcp.server.domain;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 public class SPU implements Serializable {
 
@@ -45,6 +47,17 @@ public class SPU implements Serializable {
         builder.append(etx);
         builder.append("]");
         return builder.toString();
+    }
+
+    public Map<String, Object> toJsonMap() {
+        Map<String, Object> jsonMap = new LinkedHashMap<>();
+        jsonMap.put("SPUIndex", sIndex);
+        jsonMap.put("rawData", rawData);
+        jsonMap.put("ver", ver);
+        jsonMap.put("damId", damId);
+        jsonMap.put("damIdType", damIdType);
+        mpuList.forEach(mpu -> jsonMap.put("MPU", mpu.toJsonMap()));
+        return jsonMap;
     }
 
     public String getStx() {

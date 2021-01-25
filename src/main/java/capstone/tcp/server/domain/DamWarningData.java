@@ -1,6 +1,8 @@
 package capstone.tcp.server.domain;
 
 import java.io.Serializable;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 public class DamWarningData implements Serializable {
 
@@ -34,6 +36,14 @@ public class DamWarningData implements Serializable {
         builder.append(power);
         builder.append("]");
         return builder.toString();
+    }
+
+    public Map<String, Object> toJsonMap() {
+        Map<String, Object> jsonMap = new LinkedHashMap<>();
+        jsonMap.put("temperature", temperature);
+        jsonMap.put("vibration", vibration);
+        jsonMap.put("power", power);
+        return jsonMap;
     }
     
     public String getTemperature() {

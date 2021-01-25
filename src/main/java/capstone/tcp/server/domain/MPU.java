@@ -20,6 +20,7 @@ public class MPU implements Serializable {
     private String mLen;
     private String cmd;
     private String item;
+    private String dataType;
     
     private PestData pest = new PestData();
     private MouseCycleData mouseCycle = new MouseCycleData();
@@ -67,47 +68,20 @@ public class MPU implements Serializable {
 
     public Map<String, Object> toJsonMap() {
         Map<String, Object> jsonMap = new LinkedHashMap<>();
+        jsonMap.put("MPUIndex", mIndex);
         jsonMap.put("time", time);
         jsonMap.put("rssi", rssi);
+        jsonMap.put("device", isDevice);
         jsonMap.put("trapId", trapId);
         jsonMap.put("trapIdType", trapIdType);
         jsonMap.put("cmd", cmd);
         jsonMap.put("item", item);
-        String device = trapId.substring(0, 2);
-        if (Arrays.asList(CapstoneConstant.DEVICE_PEST).contains(device)) {
-            switch (item) {
-                case CapstoneConstant.ITEM_WARNING:
-                    jsonMap.put("data_type", "PEST_warning");
-                    jsonMap.put("data", pest);
-                    break;
-                case CapstoneConstant.ITEM_CYCLE:
-                    jsonMap.put("data_type", "PEST_cycle");
-                    jsonMap.put("data", pest);
-                    break;
-                case CapstoneConstant.ITEM_SNAPSHOT:
-                    jsonMap.put("data_type", "PEST_snapshot");
-                    jsonMap.put("data", snapShot);
-                    break;
-            }// switch
-        } else if (Arrays.asList(CapstoneConstant.DEVICE_MOUSE).contains(device)) {
-            switch (item) {
-                case CapstoneConstant.ITEM_WARNING:
-                    jsonMap.put("data_type", "MOUSE_warning");
-                    jsonMap.put("data", mouseWarning);
-                    break;
-                case CapstoneConstant.ITEM_CYCLE:
-                    jsonMap.put("data_type", "MOUSE_cycle");
-                    jsonMap.put("data", mouseCycle);
-                    break;
-                case CapstoneConstant.ITEM_SNAPSHOT:
-                    jsonMap.put("data_type", "MOUSE_snapshot");
-                    jsonMap.put("data", snapShot);
-                    break;
-            }// switch
-        } else if (Arrays.asList(CapstoneConstant.DEVICE_NETWORK).contains(device)) {
-            jsonMap.put("data_type", "DamWarning");
-            jsonMap.put("data", damWarning);
-        }
+        jsonMap.put("dataType", dataType);
+        jsonMap.put("pest", pest.toJsonMap());
+        jsonMap.put("mouseCycle", mouseCycle.toJsonMap());
+        jsonMap.put("mouseWarning", mouseWarning.toJsonMap());
+        jsonMap.put("snapShot", snapShot.toJsonMap());
+        jsonMap.put("damWarning", damWarning.toJsonMap());
         return jsonMap;
     }
 
@@ -166,6 +140,14 @@ public class MPU implements Serializable {
 
     public void setmIndex(String mIndex) {
         this.mIndex = mIndex;
+    }
+
+    public String getDataType() {
+        return dataType;
+    }
+
+    public void setDataType(String dataType) {
+        this.dataType = dataType;
     }
 
 

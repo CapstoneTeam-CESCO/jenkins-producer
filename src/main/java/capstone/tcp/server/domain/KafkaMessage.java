@@ -12,13 +12,7 @@ public class KafkaMessage {
 
     public Map<String, Object> toJsonMap() {
         Map<String, Object> jsonMap = new LinkedHashMap<>();
-        jsonMap.put("ver", command.getVer());
-        jsonMap.put("damId", command.getDamId());
-        jsonMap.put("damIdType", command.getDamIdType());
-        for(MPU mpu : command.getMpuList()) {
-            jsonMap.put("mIndex", mpu.getmIndex());
-            jsonMap.put("MPU", mpu.toJsonMap());
-        }
+        jsonMap.put("SPU", command.toJsonMap());
         return jsonMap;
     }
 }

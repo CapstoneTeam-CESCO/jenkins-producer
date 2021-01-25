@@ -117,14 +117,17 @@ public class MessageServiceImpl implements MessageService {
                 switch (mpu.getItem()) {
                     case CapstoneConstant.ITEM_WARNING:
                         LogUtil.traceLogInfo(command, "Warning Data");
+                        mpu.setDataType(CapstoneConstant.PEST_DATA);
                         offset = setPestData(command, dst, offset, mpu);
                         break;
                     case CapstoneConstant.ITEM_CYCLE:
                         LogUtil.traceLogInfo(command, "Cycle Data");
+                        mpu.setDataType(CapstoneConstant.PEST_DATA);
                         offset = setPestData(command, dst, offset, mpu);
                         break;
                     case CapstoneConstant.ITEM_SNAPSHOT:
                         LogUtil.traceLogInfo(command, "Snap Shot Data");
+                        mpu.setDataType(CapstoneConstant.SNAPSHOT_DATA);
                         offset = setSnapShotData(command, dst, offset, mpu);
                         break;
                     default:
@@ -139,14 +142,17 @@ public class MessageServiceImpl implements MessageService {
 
                     case CapstoneConstant.ITEM_WARNING:
                         LogUtil.traceLogInfo(command, "Warning Data");
+                        mpu.setDataType(CapstoneConstant.MOUSE_WARNING_DATA);
                         offset = setMouseWarningData(command, dst, offset, mpu);
                         break;
                     case CapstoneConstant.ITEM_CYCLE:
                         LogUtil.traceLogInfo(command, "Cycle Data");
+                        mpu.setDataType(CapstoneConstant.MOUSE_CYCLE_DATA);
                         offset = setMouseCycleData(command, dst, offset, mpu);
                         break;
                     case CapstoneConstant.ITEM_SNAPSHOT:
                         LogUtil.traceLogInfo(command, "Snap Shot Data");
+                        mpu.setDataType(CapstoneConstant.SNAPSHOT_DATA);
                         offset = setSnapShotData(command, dst, offset, mpu);
                         break;
                     default:
@@ -155,6 +161,7 @@ public class MessageServiceImpl implements MessageService {
                 }// switch
             } else if (Arrays.asList(CapstoneConstant.DEVICE_NETWORK).contains(device)) {
                 LogUtil.traceLogInfo(command, "Network Device");
+                mpu.setDataType(CapstoneConstant.DAM_WARNING_DATA);
                 offset = setDamWarning(command, dst, offset, mpu);
                 // DAM 처리 안함 ; 
                 mpu.setDevice(true);

@@ -93,4 +93,17 @@ public class CapstoneConstant {
      * Command / Read / Response
      */
     public static final String CMD_RESPONSE_READ = "80";
+
+    /**
+     * for setDataType() in MPU.java
+     */
+    public static final String PEST_DATA = "pestData";
+
+    public static final String MOUSE_CYCLE_DATA = "mouseCycleData";
+
+    public static final String MOUSE_WARNING_DATA = "mouseWarningData";
+
+    public static final String SNAPSHOT_DATA = "snapshotData";
+
+    public static final String DAM_WARNING_DATA = "damWarningData";
 }
