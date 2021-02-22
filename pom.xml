@@ -105,8 +105,52 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
-		
-<!--		<dependency>-->
+
+
+<!--MariaDB-->
+		<!-- https://mvnrepository.com/artifact/org.mariadb.jdbc/mariadb-java-client -->
+		<dependency>
+			<groupId>org.mariadb.jdbc</groupId>
+			<artifactId>mariadb-java-client</artifactId>
+			<version>2.7.1</version>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/org.springframework/spring-core -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-core</artifactId>
+			<version>5.3.3</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-jdbc</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-configuration-processor</artifactId>
+			<optional>true</optional>
+		</dependency>
+
+
+		<!-- https://mvnrepository.com/artifact/org.mybatis/mybatis -->
+		<dependency>
+			<groupId>org.mybatis</groupId>
+			<artifactId>mybatis</artifactId>
+			<version>3.5.6</version>
+		</dependency>
+
+
+
+		<dependency>
+			<groupId>org.mybatis.spring.boot</groupId>
+			<artifactId>mybatis-spring-boot-starter</artifactId>
+			<version>2.1.4</version>
+		</dependency>
+
+
+		<!--		<dependency>-->
 <!--		    <groupId>org.bgee.log4jdbc-log4j2</groupId>-->
 <!--		    <artifactId>log4jdbc-log4j2-jdbc4.1</artifactId>-->
 <!--		    <version>1.16</version>-->
@@ -123,6 +167,11 @@
 		    <groupId>com.github.snksoft</groupId>
 		    <artifactId>crc</artifactId>
 		    <version>1.0.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<version>1.18.16</version>
 		</dependency>
 
 	</dependencies>

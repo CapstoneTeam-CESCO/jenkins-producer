@@ -8,7 +8,7 @@ public class KafkaServer {
     private Producer<String, String> producer;
 
     public KafkaServer() {
-        final String BOOTSTRAPSERVER = "34.64.155.139:9092";
+        final String BOOTSTRAPSERVER = "34.64.230.241:9092";
 
         Properties props = new Properties();
         props.put("bootstrap.servers", BOOTSTRAPSERVER);

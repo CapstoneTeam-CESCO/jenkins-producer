@@ -19,12 +19,15 @@
 package capstone.tcp.server.handler;
 
 import java.net.InetSocketAddress;
+import java.nio.charset.Charset;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
 import capstone.tcp.server.domain.KafkaMessage;
+import capstone.tcp.server.mariaConnect.domain.PacketDTO;
+import capstone.tcp.server.mariaConnect.mapper.PacketMapper;
 import capstone.tcp.server.server.KafkaServer;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.kafka.clients.producer.Producer;
@@ -52,6 +55,9 @@ public class ServiceHandler extends ChannelInboundHandlerAdapter {
     
     @Autowired
     private MessageService service;
+
+    @Autowired
+    private PacketMapper packetMapper;
 
     @Autowired
     private SendService sService;
@@ -102,17 +108,27 @@ public class ServiceHandler extends ChannelInboundHandlerAdapter {
         
         long start = System.currentTimeMillis();
         ByteBuf buf = (ByteBuf) msg;
+
         int length = buf.readableBytes();
         LogUtil.traceLog.debug("::length::" + length);
         
         byte[] dst = new byte[length];
         buf.getBytes(0, dst, 0, length);
-        
-        // binary log 
-        LogUtil.binaryLog.info(ConvertUtil.getByte2HexStringUpper(dst, 0, dst.length));
-        
+
+        // binary log
+        String contents = ConvertUtil.getByte2HexStringUpper(dst, 0, dst.length);
+        LogUtil.binaryLog.info(contents);
+
+        //Send to maria  : 로우 패킷을 연결된 마리아 DB에 저장합니다.
+        PacketDTO params = new PacketDTO();
+//        params.setId();
+        params.setContents(contents);
+        packetMapper.insertPacket(params);
+
         // header parsing
         SPU command = service.getHeader(dst);
+
+
         LogUtil.traceLogInfo(command, "=========== START ===========");
         LogUtil.traceLogInfo(command, command.toString());
         
