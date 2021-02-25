@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface PacketMapper {
 
+    // 원본 RawData 저장 메소드
     public int insertPacket(PacketDTO params);
 
     // 이후 필요시 제작

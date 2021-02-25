@@ -17,6 +17,6 @@ public interface PacketService {
 
     //public PacketDTO getPacketDetail(Long id);
 
-//    public List<PacketDTO> getBoardList();
+    //public List<PacketDTO> getBoardList();
 
 }
